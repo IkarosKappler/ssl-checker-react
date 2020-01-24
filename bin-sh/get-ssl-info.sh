@@ -9,10 +9,17 @@
 
 # Params
 #  $ARG1 hostname (without https://)
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied. Please specify a host name."
+    exit 1
+fi
+
+
 function get-ssl-info() {
 
     # This call works with most SSL certificate types
-    output=$(curl -o - -s -v --insecure -ILXGET "https://$1" 2>&1 | sed '/^(\n\r)(\n\r)/d')
+    # output=$(curl -o - -s -v --insecure -ILXGET "https://$1" 2>&1 | sed '/^(\n\r)(\n\r)/d')
     output=$(curl --insecure -v "https://$1" 2>&1 | awk 'BEGIN { cert=0 } /^\* SSL connection/ { cert=1 } /^\*/ { if (cert) print }')
     # echo "output: $output"
 
@@ -65,8 +72,22 @@ function get-ssl-info() {
     echo "SSL_ISSUER_STATE=$SSL_ISSUER_STATE"
     echo "SSL_NAME_MATCH=$SSL_NAME_MATCH"
 
-    # Write the stuff to a file or database
-    # ...
+    # Write the stuff to a JSON file or database
+    echo "[ {
+       \"SSL_PROTOCOL\" : \"$SSL_PROTOCOL\", 
+       \"SSL_COMMON_NAME\" : \"$SSL_COMMON_NAME\", 
+       \"SSL_PUBLIC_KEY_TYPE\" : \"$SSL_PUBLIC_KEY_TYPE\", 
+       \"SSL_CERT_VERSION\" : \"$SSL_CERT_VERSION\", 
+       \"SSL_START_DATE\" : \"$SSL_START_DATE\", 
+       \"SSL_EXPIRE_DATE\" : \"$SSL_EXPIRE_DATE\", 
+       \"SSL_ISSUE_COUNTRY\" : \"$SSL_ISSUER_COUNTRY\", 
+       \"SSL_ISSUER_ORGANISATION\" : \"$SSL_ISSUER_ORGANISATION\", 
+       \"SSL_ISSUER_ORGANISATIONAL_UNIT\" : \"$SSL_ISSUER_ORGANISATIONAL_UNIT\", 
+       \"SSL_ISSUER_COMMON_NAME\" : \"$SSL_ISSUER_COMMON_NAME\", 
+       \"SSL_ISSUER_LOCALITY\" : \"$SSL_ISSUER_LOCALITY\", 
+       \"SSL_ISSUER_STATE\" : \"$SSL_ISSUER_STATE\", 
+       \"SSL_NAME_MATCH\" : $SSL_NAME_MATCH
+    } ]" > "../data/$1.json"
 }
 
 get-ssl-info $1

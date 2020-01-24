@@ -1,0 +1,15 @@
+[ {
+       "SSL_PROTOCOL" : "TLS1.2 ", 
+       "SSL_COMMON_NAME" : "*.int2byte.de", 
+       "SSL_PUBLIC_KEY_TYPE" : "RSA", 
+       "SSL_CERT_VERSION" : "#3", 
+       "SSL_START_DATE" : "Thu, 07 Mar 2019 00:00:00 GMT", 
+       "SSL_EXPIRE_DATE" : "Fri, 06 Mar 2020 12:00:00 GMT", 
+       "SSL_ISSUE_COUNTRY" : "US", 
+       "SSL_ISSUER_ORGANISATION" : "DigiCert Inc", 
+       "SSL_ISSUER_ORGANISATIONAL_UNIT" : "www.digicert.com", 
+       "SSL_ISSUER_COMMON_NAME" : "Encryption Everywhere DV TLS CA - G1", 
+       "SSL_ISSUER_LOCALITY" : "", 
+       "SSL_ISSUER_STATE" : "", 
+       "SSL_NAME_MATCH" : false
+    } ]

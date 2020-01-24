@@ -150,3 +150,16 @@ File: ./webpack.config.js
     }
  };
 ~~~
+
+
+## Installation of axios
+$ npm install axios --save-dev
+
+Tell webpack to include js file (to find axios).
+Add ".js" to the extensions list:
+~~~
+    resolve: {
+        // Add '.ts' and '.tsx' as resolvable extensions.
+        extensions: [".js", ".ts", ".tsx"]
+    },
+~~~
