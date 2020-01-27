@@ -18,9 +18,11 @@ fi
 
 function get-ssl-info() {
 
+    name=$1
+
     # This call works with most SSL certificate types
     # output=$(curl -o - -s -v --insecure -ILXGET "https://$1" 2>&1 | sed '/^(\n\r)(\n\r)/d')
-    output=$(curl --insecure -v "https://$1" 2>&1 | awk 'BEGIN { cert=0 } /^\* SSL connection/ { cert=1 } /^\*/ { if (cert) print }')
+    output=$(curl --insecure -v "https://$name" 2>&1 | awk 'BEGIN { cert=0 } /^\* SSL connection/ { cert=1 } /^\*/ { if (cert) print }')
     # echo "output: $output"
 
     # Output looks like this:
@@ -56,7 +58,7 @@ function get-ssl-info() {
     SSL_ISSUER_ORGANISATION=$(echo "$output" | grep -Po '\\*(\s)*issuer: ((^O=)|[^\n\r])*(\s*)O=\K[^,\n\r]*')
     SSL_ISSUER_LOCALITY=$(echo "$output" | grep -Po '\\*(\s)*issuer: ((^L=)|[^\n\r])*(\s*)L=\K[^,\n\r]*')
     SSL_ISSUER_STATE=$(echo "$output" | grep -Po '\\*(\s)*issuer: ((^S=)|[^\n\r])*(\s*)S=\K[^,\n\r]*')
-    SSL_NAME_MATCH=$(if [ "$1" = "$SSL_COMMON_NAME" ]; then echo "true"; else echo "false"; fi)
+    SSL_NAME_MATCH=$(if [ "$name" = "$SSL_COMMON_NAME" ]; then echo "true"; else echo "false"; fi)
     
     echo "SSL_PROTOCOL=$SSL_PROTOCOL"
     echo "SSL_COMMON_NAME=$SSL_COMMON_NAME"
@@ -73,21 +75,22 @@ function get-ssl-info() {
     echo "SSL_NAME_MATCH=$SSL_NAME_MATCH"
 
     # Write the stuff to a JSON file or database
-    echo "[ {
-       \"SSL_PROTOCOL\" : \"$SSL_PROTOCOL\", 
-       \"SSL_COMMON_NAME\" : \"$SSL_COMMON_NAME\", 
-       \"SSL_PUBLIC_KEY_TYPE\" : \"$SSL_PUBLIC_KEY_TYPE\", 
-       \"SSL_CERT_VERSION\" : \"$SSL_CERT_VERSION\", 
-       \"SSL_START_DATE\" : \"$SSL_START_DATE\", 
-       \"SSL_EXPIRE_DATE\" : \"$SSL_EXPIRE_DATE\", 
-       \"SSL_ISSUE_COUNTRY\" : \"$SSL_ISSUER_COUNTRY\", 
-       \"SSL_ISSUER_ORGANISATION\" : \"$SSL_ISSUER_ORGANISATION\", 
-       \"SSL_ISSUER_ORGANISATIONAL_UNIT\" : \"$SSL_ISSUER_ORGANISATIONAL_UNIT\", 
-       \"SSL_ISSUER_COMMON_NAME\" : \"$SSL_ISSUER_COMMON_NAME\", 
-       \"SSL_ISSUER_LOCALITY\" : \"$SSL_ISSUER_LOCALITY\", 
-       \"SSL_ISSUER_STATE\" : \"$SSL_ISSUER_STATE\", 
-       \"SSL_NAME_MATCH\" : $SSL_NAME_MATCH
-    } ]" > "../data/$1.json"
+    echo "{
+  \"name\" : \"$name\",
+  \"SSL_PROTOCOL\" : \"$SSL_PROTOCOL\", 
+  \"SSL_COMMON_NAME\" : \"$SSL_COMMON_NAME\", 
+  \"SSL_PUBLIC_KEY_TYPE\" : \"$SSL_PUBLIC_KEY_TYPE\", 
+  \"SSL_CERT_VERSION\" : \"$SSL_CERT_VERSION\", 
+  \"SSL_START_DATE\" : \"$SSL_START_DATE\", 
+  \"SSL_EXPIRE_DATE\" : \"$SSL_EXPIRE_DATE\", 
+  \"SSL_ISSUE_COUNTRY\" : \"$SSL_ISSUER_COUNTRY\", 
+  \"SSL_ISSUER_ORGANISATION\" : \"$SSL_ISSUER_ORGANISATION\", 
+  \"SSL_ISSUER_ORGANISATIONAL_UNIT\" : \"$SSL_ISSUER_ORGANISATIONAL_UNIT\", 
+  \"SSL_ISSUER_COMMON_NAME\" : \"$SSL_ISSUER_COMMON_NAME\", 
+  \"SSL_ISSUER_LOCALITY\" : \"$SSL_ISSUER_LOCALITY\", 
+  \"SSL_ISSUER_STATE\" : \"$SSL_ISSUER_STATE\", 
+  \"SSL_NAME_MATCH\" : $SSL_NAME_MATCH
+}" > "../data/$name.json"
 }
 
 get-ssl-info $1
