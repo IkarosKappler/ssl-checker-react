@@ -9,6 +9,11 @@ module.exports = {
         extensions: [".js", ".ts", ".tsx"]
     },
 
+    performance: {
+        hints: false, // 'error'
+        maxEntrypointSize:400000
+    },
+
     module: {
         rules: [
             {

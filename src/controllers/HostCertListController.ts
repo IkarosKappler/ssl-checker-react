@@ -13,7 +13,6 @@ const HostListController = {
         return new Promise<HostCertList>( (resolve,reject) => {
             axios.get('/data/list.php', {})
             .then(function (response) {
-              console.log('Response loaded:', response );
               resolve((response.data as unknown) as HostCertList);
             })
             .catch(function (error) {

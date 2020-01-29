@@ -6,6 +6,7 @@
 
  export type HostCertInfo = {
     name: string;
+    date: string;
     SSL_PROTOCOL : string; 
     SSL_COMMON_NAME : string; 
     SSL_PUBLIC_KEY_TYPE : string;

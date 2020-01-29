@@ -74,9 +74,12 @@ function get-ssl-info() {
     echo "SSL_ISSUER_STATE=$SSL_ISSUER_STATE"
     echo "SSL_NAME_MATCH=$SSL_NAME_MATCH"
 
+    date=$(date)
+    
     # Write the stuff to a JSON file or database
     echo "{
   \"name\" : \"$name\",
+  \"date\" : \"$date\",
   \"SSL_PROTOCOL\" : \"$SSL_PROTOCOL\", 
   \"SSL_COMMON_NAME\" : \"$SSL_COMMON_NAME\", 
   \"SSL_PUBLIC_KEY_TYPE\" : \"$SSL_PUBLIC_KEY_TYPE\", 

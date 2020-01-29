@@ -1,5 +1,6 @@
 {
   "name" : "func.name",
+  "date" : "Mi 29. Jan 20:58:14 CET 2020",
   "SSL_PROTOCOL" : "TLS1.2 ", 
   "SSL_COMMON_NAME" : "dev.func.name", 
   "SSL_PUBLIC_KEY_TYPE" : "RSA", 

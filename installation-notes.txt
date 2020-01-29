@@ -163,3 +163,17 @@ Add ".js" to the extensions list:
         extensions: [".js", ".ts", ".tsx"]
     },
 ~~~
+
+
+## Add Material UI
+$ npm install @material-ui/core
+$ npm install @material-ui/icons
+
+### Suppress webpack performance warnings
+File: webpack.config.js
+~~~
+    performance: {
+        hints: false, // 'error'
+        maxEntrypointSize:400000
+    },
+~~~
