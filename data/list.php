@@ -2,7 +2,7 @@
 
 header('Content-Type: text/plain; charset=utf-8');
 
-echo "[";
+echo "{ \"hosts\" : [";
 
 $list = scandir(".");
 $didPrint = false;
@@ -15,4 +15,4 @@ foreach( $list as $filename ) {
     $didPrint = true;
 }
 
-echo "]";
+echo "] }";

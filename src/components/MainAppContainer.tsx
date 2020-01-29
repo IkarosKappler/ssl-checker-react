@@ -3,7 +3,8 @@ import * as React from 'react';
 import { Button, Typography } from '@material-ui/core';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 
-import HostCertListController from '../controllers/HostCertListController';
+// import HostCertListController from '../controllers/HostCertListController';
+import { useCertListProvider } from '../providers/CertListProvider/provider';
 import { HostCertInfo, HostCertList } from '../types/HostCertList';
 
 export interface IMainAppContainerProps {
@@ -13,26 +14,14 @@ export interface IMainAppContainerProps {
 
 // The main component as a React.FunctionComponent
 export const MainAppContainer: React.FunctionComponent<IMainAppContainerProps> = props => {
-  const [jsonValue, setJsonValue] = React.useState<any>(undefined);
 
-  const loadFromServer = (): void => {
-    HostCertListController.loadAllFromServer()
-      .then((list: HostCertList) => {
-        console.log("Loaded list", list);
-        setJsonValue(list);
-      })
-      .catch(error => {
-        console.log("Failed to load list from server.", error);
-      });
-  };
-
-  const reloadCertInfo = (): void => {
-
-  }
+  const { loadFromServer, reloadCertInfo, getCertList } = useCertListProvider();
 
   interface ListEntryProps {
     info: HostCertInfo;
   }
+
+  const certList:HostCertList = getCertList();
 
   const ListEntry = (props: ListEntryProps): JSX.Element => {
     const { info } = props;
@@ -49,6 +38,7 @@ export const MainAppContainer: React.FunctionComponent<IMainAppContainerProps> =
     // SSL_ISSUER_LOCALITY : string;
     // SSL_ISSUER_STATE : string;
     // SSL_NAME_MATCH : boolean;
+
     return (
       <tr>
         <td>{info.name}</td>
@@ -56,7 +46,7 @@ export const MainAppContainer: React.FunctionComponent<IMainAppContainerProps> =
         <td>{info.date}</td>
         <td>{info.SSL_EXPIRE_DATE}</td>
         <td>
-          <Button onClick={reloadCertInfo}>
+          <Button onClick={e=>reloadCertInfo(info.name)}>
             <Typography>
               <AutorenewIcon />
             </Typography>
@@ -78,15 +68,17 @@ export const MainAppContainer: React.FunctionComponent<IMainAppContainerProps> =
       </Button>
       <table>
         <thead>
-          <th>Name</th>
-          <th>Common Name</th>
-          <th>Request date</th>
-          <th>Expiration date</th>
-          <th>Actions</th>
+            <tr>
+                <th>Name</th>
+                <th>Common Name</th>
+                <th>Request date</th>
+                <th>Expiration date</th>
+                <th>Actions</th>
+            </tr>
         </thead>
         <tbody>
-          {jsonValue &&
-            jsonValue.map((info: HostCertInfo, index: number) => {
+          {certList &&
+            certList.hosts.map((info: HostCertInfo, index: number) => {
               console.log("re-render", index, info);
               return (
                 <ListEntry
