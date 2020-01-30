@@ -11,7 +11,7 @@ import { HostCertInfo, HostCertList } from "../types/HostCertList";
 const HostListController = {
     loadAllFromServer : () : Promise<HostCertList> => {
         return new Promise<HostCertList>( (resolve,reject) => {
-            axios.get('/data/list.php', {})
+            axios.get('data/list.php', {})
             .then(function (response) {
               resolve((response.data as unknown) as HostCertList);
             })
